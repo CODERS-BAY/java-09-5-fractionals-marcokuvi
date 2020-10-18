@@ -6,69 +6,101 @@ package at.codersbay.datastructures;
  */
 public class Fractional {
 
+    private Integer numerator;
+    private Integer denominator;
+
     public Fractional(Integer numerator, Integer denominator) {
-        // TODO implement to fix tests in FractionalTest1
+        if (numerator == null || denominator == null) {
+            throw new IllegalArgumentException("You shall not pass null!");
+        } else if (denominator == 0) {
+            throw new IllegalArgumentException("You shall not divide through zero!");
+        } else {
+            this.numerator = numerator;
+            this.denominator = denominator;
+        }
+
     }
 
     public Integer getNumerator() {
-        // TODO implement to fix tests in FractionalTest1
-        return -1;
+        return numerator;
     }
 
     public Integer getDenominator() {
-        // TODO implement to fix tests in FractionalTest1
-        return -1;
+        return denominator;
     }
 
     public Float asFloat() {
-        // TODO implement to fix tests in FractionalTest2
-        return -1f;
+
+        Float newNumerator = numerator.floatValue();
+        Float newDenominator = denominator.floatValue();
+        Float resultOfFraction = newNumerator / newDenominator;
+
+        return resultOfFraction;
     }
 
     @Override
     public boolean equals(Object obj) {
-        // TODO implement to fix tests in FractionalTest3
-        return false;
+        if (!(obj instanceof Fractional)) {
+            return false;
+        }
+        Fractional fraction = ((Fractional) obj);
+        Integer greatestCommonDivisor = MathClass.searchForGreatestCommonDivisor(numerator, denominator);
+        fraction.reduce();
+        if (this.numerator / greatestCommonDivisor == fraction.numerator && this.denominator / greatestCommonDivisor == fraction.denominator) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Fractional reduce() {
+        Integer greatestCommonDivisor = MathClass.searchForGreatestCommonDivisor(numerator, denominator);
+        numerator = numerator / greatestCommonDivisor;
+        denominator = denominator / greatestCommonDivisor;
+        return this;
     }
 
     public Fractional multiply(Fractional other) {
-        // TODO implement to fix tests in FractionalTest4
-        return new Fractional(1, 1);
+        return new Fractional(this.numerator * other.numerator, this.denominator * other.denominator);
     }
 
     public Fractional multiply(Integer other) {
-        // TODO implement to fix tests in FractionalTest4
-        return new Fractional(1, 1);
+        if (other == 0) {
+            return new Fractional(0, this.denominator);
+        } else if (other == 1) {
+            return new Fractional(this.numerator * other, this.denominator * other);
+        }
+        return new Fractional((this.numerator * other / MathClass.searchForGreatestCommonDivisor(numerator, other)), (this.denominator * other / MathClass.searchForGreatestCommonDivisor(denominator, other)));
     }
 
     public Fractional divide(Fractional other) {
-        // TODO implement to fix tests in FractionalTest5
-        return new Fractional(1, 1);
+        return new Fractional(this.numerator * other.denominator, this.denominator * other.numerator);
     }
 
     public Fractional divide(Integer other) {
-        // TODO implement to fix tests in FractionalTest5
-        return new Fractional(1, 1);
+        if (other == 0) {
+            throw new IllegalArgumentException("You cannot divide through zero!");
+        } else if (other == 1) {
+            return new Fractional(1, this.denominator * other);
+        } else {
+            return new Fractional(this.numerator, this.denominator * other);
+        }
     }
 
     public Fractional add(Fractional other) {
-        // TODO implement to fix tests in FractionalTest6
-        return new Fractional(1, 1);
+        return new Fractional((this.numerator * other.denominator) + (this.denominator * other.numerator), this.denominator * other.denominator);
     }
 
     public Fractional add(Integer other) {
-        // TODO implement to fix tests in FractionalTest6
-        return new Fractional(1, 1);
+        return new Fractional((this.numerator) + (this.denominator * other), denominator);
     }
 
     public Fractional subtract(Fractional other) {
-        // TODO implement to fix tests in FractionalTest7
-        return new Fractional(1, 1);
+        return new Fractional((this.numerator * other.denominator) - (this.denominator * other.numerator), this.denominator * other.denominator);
     }
 
     public Fractional subtract(Integer other) {
-        // TODO implement to fix tests in FractionalTest7
-        return new Fractional(1, 1);
+        return new Fractional((this.numerator) - (this.denominator * other), denominator);
     }
 
 }
